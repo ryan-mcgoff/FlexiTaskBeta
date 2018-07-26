@@ -124,6 +124,8 @@ public class TaskCursorAdaptor extends CursorAdapter {
         titleTextView.setText(titleString);
         descriptionTextView.setText(descriptionString);
 
+
+
     }
 
 
@@ -152,9 +154,7 @@ public class TaskCursorAdaptor extends CursorAdapter {
 
 
         //log for testing purposes
-         Log.v(" ",taskTitle + " \nDays: " + String.valueOf(daysSinceTaskLastCompleted)
-                    + "\nrecurring: " +String.valueOf(recurringPeriod) + "\npriority: "
-                    + String.valueOf(priorityRating) +"\n-------------------\n" );
+
 
 
         //if 75% until due, set green priority

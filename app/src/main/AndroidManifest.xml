@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".TimelineFragmentsContainer">
+        <activity android:name=".mainTest">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -18,22 +18,21 @@
         </activity>
         <activity
             android:name=".FixedTaskEditor"
-            android:windowSoftInputMode="adjustPan|stateHidden"
-            android:parentActivityName=".TimelineFragmentsContainer" >
+            android:parentActivityName=".mainTest"
+            android:windowSoftInputMode="adjustPan|stateHidden">
+
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".TimelineFragmentsContainer" />
+                android:value=".mainTest" />
         </activity>
         <activity android:name=".FlexiTaskEditor" />
 
         <provider
-
             android:name=".data.TaskProvider"
-
             android:authorities="com.example.android.flexitask"
-
             android:exported="false" />
+
     </application>
 
 </manifest>
