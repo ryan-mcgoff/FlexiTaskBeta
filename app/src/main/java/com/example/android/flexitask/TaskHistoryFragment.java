@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,8 @@ import android.widget.RadioGroup;
 
 import com.example.android.flexitask.data.taskContract;
 import com.example.android.flexitask.data.taskDBHelper;
+
+import java.util.Calendar;
 
 /**
  * Created by rymcg on 21/07/2018.
@@ -40,7 +43,7 @@ public class TaskHistoryFragment extends Fragment implements LoaderManager.Loade
     private long todayDate;
     private long dateFilter;
     private int taskFilter;
-    
+
 
     @Nullable
     @Override
@@ -48,6 +51,10 @@ public class TaskHistoryFragment extends Fragment implements LoaderManager.Loade
          super.onCreateView(inflater, container, savedInstanceState);
 
          rootView = inflater.inflate(R.layout.fragment_task_history, container, false);
+
+        todayDate = Calendar.getInstance().getTimeInMillis();
+        dateFilter = todayDate;
+        taskFilter = taskContract.TaskEntry.TYPE_ALL;
 
         timeBtnSelected = rootView.findViewById(R.id.btnAnyTime);
         timeBtnSelected.setBackgroundResource(R.drawable.oval_shape_selected);
@@ -76,23 +83,31 @@ public class TaskHistoryFragment extends Fragment implements LoaderManager.Loade
                     case R.id.btnAnyTime:
 
                         timeBtnSelectDeselect(checkedId);
-                        ///do stuff
+                        dateFilter = todayDate;
+                        getLoaderManager().restartLoader(TASKLOADER, null, TaskHistoryFragment.this);
                         break;
                     case R.id.btnLastDay:
                         timeBtnSelectDeselect(checkedId);
+                        dateFilter = todayDate - (86400000L);
+                        getLoaderManager().restartLoader(TASKLOADER, null, TaskHistoryFragment.this);
+
                         break;
                     case R.id.btnLastWeek:
                         timeBtnSelectDeselect(checkedId);
+                        dateFilter = todayDate - (86400000L*7);
+                        getLoaderManager().restartLoader(TASKLOADER, null, TaskHistoryFragment.this);
                         break;
                     case R.id.btnLastMonth:
                         timeBtnSelectDeselect(checkedId);
+                        dateFilter = todayDate - (86400000L*31);
+                        getLoaderManager().restartLoader(TASKLOADER, null, TaskHistoryFragment.this);
                         break;
                     case R.id.btnLastYear:
                         timeBtnSelectDeselect(checkedId);
+                        dateFilter = todayDate - (86400000L*365);
+                        getLoaderManager().restartLoader(TASKLOADER, null, TaskHistoryFragment.this);
                         break;
-
                 }
-
             }
         });
 
@@ -102,13 +117,18 @@ public class TaskHistoryFragment extends Fragment implements LoaderManager.Loade
                 switch (checkedId){
                     case R.id.btnAllTasks:
                         taskBtnSelectDeselect(checkedId);
-                        ///do stuff
+                        taskFilter = taskContract.TaskEntry.TYPE_ALL;
+                        getLoaderManager().restartLoader(TASKLOADER, null, TaskHistoryFragment.this);
                         break;
                     case R.id.btnFixedTasks:
                         taskBtnSelectDeselect(checkedId);
+                        taskFilter = taskContract.TaskEntry.TYPE_FIXED;
+                        getLoaderManager().restartLoader(TASKLOADER, null, TaskHistoryFragment.this);
                         break;
                     case R.id.btnFlexiTasks:
                         taskBtnSelectDeselect(checkedId);
+                        taskFilter = taskContract.TaskEntry.TYPE_FLEXI;
+                        getLoaderManager().restartLoader(TASKLOADER, null, TaskHistoryFragment.this);
                         break;
 
                 }
@@ -153,12 +173,20 @@ public class TaskHistoryFragment extends Fragment implements LoaderManager.Loade
 
         String WHERE = "status='0'";
 
+        if(dateFilter!=todayDate){
+            Log.v("Date", "date FIlter not equal to today");
+            WHERE+= " AND "+ taskContract.TaskEntry.COLUMN_LAST_COMPLETED + ">"+String.valueOf(dateFilter);
+        }
+        if(taskFilter!= taskContract.TaskEntry.TYPE_ALL){
+            WHERE+= " AND task_type = ' " + String.valueOf(taskFilter)+"'";
+        }
+
         return new CursorLoader(getActivity(),
                 taskContract.TaskEntry.CONTENT_URI,
                 projection,
                 WHERE,
                 null,
-                "CAST(" + taskContract.TaskEntry.COLUMN_DATE + " AS DOUBLE)");
+                "CAST(" + taskContract.TaskEntry.COLUMN_LAST_COMPLETED + " AS DOUBLE)");
     }
 
     @Override

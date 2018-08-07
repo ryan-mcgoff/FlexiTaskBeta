@@ -131,7 +131,7 @@ public final class taskContract {
          */
         public static final int TYPE_FIXED = 0;
         public static final int TYPE_FLEXI = 1;
-
+        public static final int TYPE_ALL = 3;
         /**
          * Possible values for active/non-active, rather than deleting, the app could toggle these
          * allowing for a record of inactive tasks ("history") and letting the user reuse old completed tasks
