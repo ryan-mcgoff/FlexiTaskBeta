@@ -1,6 +1,7 @@
 package com.example.android.flexitask;
 
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,7 +12,10 @@ import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import com.example.android.flexitask.data.taskContract;
 import com.example.android.flexitask.data.taskDBHelper;
@@ -26,12 +30,31 @@ public class TaskHistoryFragment extends Fragment implements LoaderManager.Loade
     TaskHistoryAdaptor mTaskCursorAdaptor;
     private taskDBHelper mDbHelper;
 
+    private Button timeBtnSelected;
+    private Button timeBtnDeselect;
+    private Button taskBtnSelected;
+    private Button taskBtnDeselect;
+
+    private View rootView;
+
+    private long todayDate;
+    private long dateFilter;
+    private int taskFilter;
+    
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
          super.onCreateView(inflater, container, savedInstanceState);
 
-        View rootView = inflater.inflate(R.layout.fragment_task_history, container, false);
+         rootView = inflater.inflate(R.layout.fragment_task_history, container, false);
+
+        timeBtnSelected = rootView.findViewById(R.id.btnAnyTime);
+        timeBtnSelected.setBackgroundResource(R.drawable.oval_shape_selected);
+
+        taskBtnSelected = rootView.findViewById(R.id.btnAllTasks);
+        taskBtnSelected.setBackgroundResource(R.drawable.oval_shape_selected);
+
 
         mDbHelper = new taskDBHelper(getActivity());
 
@@ -42,7 +65,72 @@ public class TaskHistoryFragment extends Fragment implements LoaderManager.Loade
         timeLineListView.setAdapter(mTaskCursorAdaptor);
 
         getLoaderManager().initLoader(TASKLOADER, null, this);
+
+        RadioGroup timeButtonGroup = rootView.findViewById(R.id.btnTimeGroup);
+        RadioGroup taskButtonGroup = rootView.findViewById(R.id.btnTaskGroup);
+
+        timeButtonGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId){
+                    case R.id.btnAnyTime:
+
+                        timeBtnSelectDeselect(checkedId);
+                        ///do stuff
+                        break;
+                    case R.id.btnLastDay:
+                        timeBtnSelectDeselect(checkedId);
+                        break;
+                    case R.id.btnLastWeek:
+                        timeBtnSelectDeselect(checkedId);
+                        break;
+                    case R.id.btnLastMonth:
+                        timeBtnSelectDeselect(checkedId);
+                        break;
+                    case R.id.btnLastYear:
+                        timeBtnSelectDeselect(checkedId);
+                        break;
+
+                }
+
+            }
+        });
+
+        taskButtonGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId){
+                    case R.id.btnAllTasks:
+                        taskBtnSelectDeselect(checkedId);
+                        ///do stuff
+                        break;
+                    case R.id.btnFixedTasks:
+                        taskBtnSelectDeselect(checkedId);
+                        break;
+                    case R.id.btnFlexiTasks:
+                        taskBtnSelectDeselect(checkedId);
+                        break;
+
+                }
+
+            }
+        });
+
+
         return rootView;
+    }
+
+    private void timeBtnSelectDeselect(int checkID){
+        timeBtnDeselect = timeBtnSelected;
+        timeBtnSelected = rootView.findViewById(checkID);
+        timeBtnDeselect.setBackgroundResource(R.drawable.oval_shape);
+        timeBtnSelected.setBackgroundResource(R.drawable.oval_shape_selected);
+    }
+    private void taskBtnSelectDeselect(int checkID){
+        taskBtnDeselect = taskBtnSelected;
+        taskBtnSelected = rootView.findViewById(checkID);
+        taskBtnDeselect.setBackgroundResource(R.drawable.oval_shape);
+        taskBtnSelected.setBackgroundResource(R.drawable.oval_shape_selected);
     }
 
     @NonNull
@@ -63,10 +151,12 @@ public class TaskHistoryFragment extends Fragment implements LoaderManager.Loade
                 taskContract.TaskEntry.COLUMN_STATUS,
                 taskContract.TaskEntry.COLUMN_RECCURING_PERIOD};
 
+        String WHERE = "status='0'";
+
         return new CursorLoader(getActivity(),
                 taskContract.TaskEntry.CONTENT_URI,
                 projection,
-                null,
+                WHERE,
                 null,
                 "CAST(" + taskContract.TaskEntry.COLUMN_DATE + " AS DOUBLE)");
     }
@@ -82,4 +172,5 @@ public class TaskHistoryFragment extends Fragment implements LoaderManager.Loade
 
         mTaskCursorAdaptor.swapCursor(null);
     }
+
 }

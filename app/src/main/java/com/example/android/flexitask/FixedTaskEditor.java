@@ -412,7 +412,7 @@ public class FixedTaskEditor extends AppCompatActivity implements LoaderManager.
         values.put(taskContract.TaskEntry.COLUMN_DATE, mDate);
         values.put(taskContract.TaskEntry.COLUMN_DESCRIPTION, description);
         values.put(taskContract.TaskEntry.COLUMN_HISTORY, "c");
-        values.put(taskContract.TaskEntry.COLUMN_STATUS, 0);
+        values.put(taskContract.TaskEntry.COLUMN_STATUS, 1);
         values.put(taskContract.TaskEntry.COLUMN_RECCURING_PERIOD, mNumberOfRecurringDays);
         values.put(taskContract.TaskEntry.COLUMN_TYPE_TASK, 0);
         values.put(taskContract.TaskEntry.COLUMN_TIME, mTime);

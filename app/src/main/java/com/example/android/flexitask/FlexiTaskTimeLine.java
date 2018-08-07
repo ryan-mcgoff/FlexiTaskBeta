@@ -235,8 +235,14 @@ public class FlexiTaskTimeLine extends Fragment implements LoaderManager.LoaderC
                 //would be "content.example.android.flexitask/task" + "3" (the ID)
                 timeLineListView.setItemChecked(lastClickedPostion, false);
                 resetUI();
-                Uri currentTaskUri = ContentUris.withAppendedId(taskContract.TaskEntry.CONTENT_URI, item_iD);
-                getActivity().getContentResolver().delete(currentTaskUri, null, null);
+                SQLiteDatabase db = mDbHelper.getWritableDatabase();
+                ContentValues cv = new ContentValues();
+                cv.put(taskContract.TaskEntry.COLUMN_STATUS, String.valueOf(0));
+                db.update(taskContract.TaskEntry.TABLE_NAME, cv, taskContract.TaskEntry._ID
+                        + " = " + lastClickedID, null);
+                getLoaderManager().restartLoader(TASKLOADER, null, FlexiTaskTimeLine.this);
+                //Uri currentTaskUri = ContentUris.withAppendedId(taskContract.TaskEntry.CONTENT_URI, item_iD);
+                //getActivity().getContentResolver().delete(currentTaskUri, null, null);
 
 
             }
@@ -330,7 +336,7 @@ public class FlexiTaskTimeLine extends Fragment implements LoaderManager.LoaderC
                 taskContract.TaskEntry.COLUMN_RECCURING_PERIOD};
 
 
-        String WHERE = "task_type='1'";
+        String WHERE = "task_type='1' AND status='1'AND status='1'";
         Calendar cTodayDate = Calendar.getInstance();
         cTodayDate.set(Calendar.HOUR_OF_DAY, 0);
         cTodayDate.set(Calendar.MINUTE, 0);

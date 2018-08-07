@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="colorEntries">
+        <item> = "Dark Mode" </item>
+        <item> = "Light Mode" </item>
+    </string-array>
+
+    <string-array name="colorValueEntries">
+        <item> = "DARK_MODE" </item>
+        <item> = "LIGHT_MODE" </item>
+    </string-array>
+
+</resources>

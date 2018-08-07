@@ -25,8 +25,15 @@
     <string name="flexi_task">Flexi Task</string>
     <string name="title_activity_main2">Main2Activity</string>
 
+    <string name="color_preference_key">color_preference_key</string>
+    <string name="color_preference_title">Color Preference</string>
+    <string name="light_mode">Light Mode</string>
+    <string name="Dark_mode">Light Mode</string>
+
+
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+    <string name="color_default_value">LIGHT_MODE</string>
 </resources>

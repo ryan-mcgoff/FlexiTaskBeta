@@ -236,7 +236,6 @@ public class FixedTaskTimeLine extends Fragment implements LoaderManager.LoaderC
                                     + " = " + lastClickedID, null);
                         }
                     }
-
                 }
                 //reset loader to show new changes
                 getLoaderManager().restartLoader(TASKLOADER, null, FixedTaskTimeLine.this);
@@ -262,8 +261,14 @@ public class FixedTaskTimeLine extends Fragment implements LoaderManager.LoaderC
                 //would be "content.example.android.flexitask/task" + "3" (the ID)
                 timeLineListView.setItemChecked(lastClickedPostion, false);
                 resetUI();
-                Uri currentTaskUri = ContentUris.withAppendedId(taskContract.TaskEntry.CONTENT_URI, item_iD);
-                getActivity().getContentResolver().delete(currentTaskUri, null, null);
+                SQLiteDatabase db = mDbHelper.getWritableDatabase();
+                ContentValues cv = new ContentValues();
+                cv.put(taskContract.TaskEntry.COLUMN_STATUS, String.valueOf(0));
+                db.update(taskContract.TaskEntry.TABLE_NAME, cv, taskContract.TaskEntry._ID
+                        + " = " + lastClickedID, null);
+                getLoaderManager().restartLoader(TASKLOADER, null, FixedTaskTimeLine.this);
+                //Uri currentTaskUri = ContentUris.withAppendedId(taskContract.TaskEntry.CONTENT_URI, item_iD);
+                //getActivity().getContentResolver().delete(currentTaskUri, null, null);
 
             }
         });
@@ -351,7 +356,7 @@ public class FixedTaskTimeLine extends Fragment implements LoaderManager.LoaderC
                 taskContract.TaskEntry.COLUMN_STATUS,
                 taskContract.TaskEntry.COLUMN_RECCURING_PERIOD};
 
-        String WHERE = "task_type='0'";
+        String WHERE = "task_type='0' AND status='1'";
 
         // Perform a query on the tasks table, connects to contentResolver which matches the URI
         //with the appropriate content provider(Task Provider)

@@ -32,7 +32,6 @@ public class mainTest extends AppCompatActivity implements NavigationView.OnNavi
         //getSupportFragmentManager().beginTransaction().add(R.id.content_frame,t).commit();
 
         displayView(R.id.nav_tasks);
-
     }
 
     @Override
@@ -58,7 +57,7 @@ public class mainTest extends AppCompatActivity implements NavigationView.OnNavi
                 title = "History";
                 break;
             case R.id.nav_settings:
-                fragment = new TaskHistoryFragment();
+                fragment = new AppSettingsFragment();
                 title = "History";
                 break;
 
@@ -68,10 +67,8 @@ public class mainTest extends AppCompatActivity implements NavigationView.OnNavi
             getSupportFragmentManager().beginTransaction().replace(R.id.content_frame,fragment).commit();
         }
 
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.nav_draw);
         drawer.closeDrawer(GravityCompat.START);
-
 
     }
 
