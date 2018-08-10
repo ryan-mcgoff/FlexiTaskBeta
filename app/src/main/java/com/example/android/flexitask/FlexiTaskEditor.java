@@ -162,6 +162,12 @@ public class FlexiTaskEditor extends AppCompatActivity implements LoaderManager.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_flexitask_editor);
 
+        android.support.v7.widget.Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
+
 
         // Find all relevant views that we will need to read user input from
         textCountTaskTitle = (TextView) findViewById(R.id.textCountTaskTitle);
@@ -204,6 +210,8 @@ public class FlexiTaskEditor extends AppCompatActivity implements LoaderManager.
             setTitle("Edit a task");
 
         }
+
+
 
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -344,6 +352,9 @@ public class FlexiTaskEditor extends AppCompatActivity implements LoaderManager.
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             // Respond to a click on the "Save" menu option
+            case android.R.id.home:
+                onBackPressed();
+                return true;
 
             case R.id.action_insert:
                 // Save Task to database
@@ -352,6 +363,7 @@ public class FlexiTaskEditor extends AppCompatActivity implements LoaderManager.
                 finish();
                 return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
 

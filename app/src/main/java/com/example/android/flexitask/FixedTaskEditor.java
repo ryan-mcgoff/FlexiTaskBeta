@@ -150,6 +150,11 @@ public class FixedTaskEditor extends AppCompatActivity implements LoaderManager.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fixed_task_editor);
 
+        android.support.v7.widget.Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
         // Find all relevant views that we will need to read user input from
         textCountTaskTitle = (TextView) findViewById(R.id.textCountTaskTitle);
         mtitleEditText = (EditText) findViewById(R.id.taskTitle);
@@ -456,6 +461,10 @@ public class FixedTaskEditor extends AppCompatActivity implements LoaderManager.
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+
+            case android.R.id.home:
+                onBackPressed();
+                return true;
 
             case R.id.action_insert:
                 // Insert Task into database

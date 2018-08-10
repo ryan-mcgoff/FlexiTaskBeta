@@ -16,12 +16,15 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toolbar;
 
 import java.util.Calendar;
 
@@ -32,6 +35,16 @@ import java.util.Calendar;
 public class mainTest extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private NotificationManagerCompat notificationManager;
+    private DrawerLayout drawerLayout;
+    private ActionBarDrawerToggle actionBarDrawerToggle;
+    private android.support.v7.widget.Toolbar toolbar;
+
+
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        actionBarDrawerToggle.syncState();
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -40,10 +53,23 @@ public class mainTest extends AppCompatActivity implements NavigationView.OnNavi
 
         Log.e("main: ","MAIN YO");
 
-
-
-
         notificationManager = NotificationManagerCompat.from(this);
+
+        android.support.v7.widget.Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        drawerLayout = (DrawerLayout) findViewById(R.id.nav_draw);
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,
+                R.string.navigation_drawer_open,R.string.navigation_drawer_close);
+
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);
+
+
+
+
+
+
+
 
         //testNotification();
         //startAlarm();
@@ -54,7 +80,6 @@ public class mainTest extends AppCompatActivity implements NavigationView.OnNavi
         //startssAlarm();
 
         setAlarm();
-
 
 
 
@@ -70,6 +95,9 @@ public class mainTest extends AppCompatActivity implements NavigationView.OnNavi
 
 
     }
+
+
+
 
     private void startssAlarm(){
         long alarmTime = Calendar.getInstance().getTimeInMillis();

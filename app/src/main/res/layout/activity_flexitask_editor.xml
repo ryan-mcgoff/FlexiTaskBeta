@@ -1,7 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Created by Ryan Mcgoff (4086944), Jerry Kumar (3821971), Jaydin Mcmullan (9702973)-->
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+
+<include
+android:id="@+id/toolbar"
+layout="@layout/toolbar"
+    />
+<ScrollView
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -11,11 +21,9 @@
         android:nestedScrollingEnabled="true"
         android:orientation="vertical">
 
-        <android.support.design.widget.CoordinatorLayout
-            android:id="@+id/EditorMainLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fitsSystemWindows="true">
+
+
+
 
             <android.support.design.widget.AppBarLayout
                 android:id="@+id/appbar"
@@ -80,7 +88,6 @@
             </android.support.design.widget.AppBarLayout>
 
 
-        </android.support.design.widget.CoordinatorLayout>
 
 
         <RelativeLayout
@@ -183,4 +190,8 @@
 
     </LinearLayout>
 
+
 </ScrollView>
+</RelativeLayout>
+
+

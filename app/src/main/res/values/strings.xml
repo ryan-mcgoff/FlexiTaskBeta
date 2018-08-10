@@ -29,6 +29,9 @@
     <string name="color_preference_title">Color Preference</string>
     <string name="light_mode">Light Mode</string>
     <string name="Dark_mode">Light Mode</string>
+    
+    <string name="drawer_open">drawer open</string>
+    <string name="drawer_close">drawer close</string>
 
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
