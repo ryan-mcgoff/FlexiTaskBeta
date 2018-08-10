@@ -50,7 +50,11 @@ public class TaskHistoryFragment extends Fragment implements LoaderManager.Loade
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
          super.onCreateView(inflater, container, savedInstanceState);
 
-         rootView = inflater.inflate(R.layout.fragment_task_history, container, false);
+
+        getContext().getTheme().applyStyle(R.style.OverlayPrimaryColorGreen, true);
+
+
+        rootView = inflater.inflate(R.layout.fragment_task_history, container, false);
 
         todayDate = Calendar.getInstance().getTimeInMillis();
         dateFilter = todayDate;

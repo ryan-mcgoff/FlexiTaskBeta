@@ -41,21 +41,16 @@ import java.util.Calendar;
  * that implements the {@link LoaderManager] interface to pass fixed task data to the a cursor
  * adaptor for the fragment's listview.
  *
- * Code for floating ActionButton, including animations and design from GitHub
- * https://github.com/Clans/FloatingActionButton
+ *
  */
 public class FixedTaskTimeLine extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int TASKLOADER = 0;
     TaskCursorAdaptor mTaskCursorAdaptor;
 
-    /**
-     * Floating Action Buttons from
-     * https://github.com/Clans/FloatingActionButton
-     */
-    private FloatingActionButton mFabFixedTask;
-    private FloatingActionButton mFabFlexi;
-    private FloatingActionMenu mFabMenu;
+
+    private android.support.design.widget.FloatingActionButton mFabFixedTask;
+
 
 
     private taskDBHelper mDbHelper;
@@ -83,25 +78,16 @@ public class FixedTaskTimeLine extends Fragment implements LoaderManager.LoaderC
         //inflates the XML layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_fixed_task_timeline, container, false);
 
-        mFabMenu = (FloatingActionMenu) rootView.findViewById(R.id.menu);
 
         mDbHelper = new taskDBHelper(getActivity());
 
-        mFabFixedTask = (FloatingActionButton) rootView.findViewById(R.id.fixedTaskButton);
+        mFabFixedTask = rootView.findViewById(R.id.fixedFab);
+
         mFabFixedTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), FixedTaskEditor.class);
-                mFabMenu.close(false);
-                startActivity(intent);
-            }
-        });
-        mFabFlexi = (FloatingActionButton) rootView.findViewById(R.id.flexiTaskButton);
-        mFabFlexi.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), FlexiTaskEditor.class);
-                mFabMenu.close(false);
+
                 startActivity(intent);
             }
         });
@@ -135,8 +121,8 @@ public class FixedTaskTimeLine extends Fragment implements LoaderManager.LoaderC
 
                     getActivity().setTitle("task selected");
                     toolBarShown = true;
-                    mFabMenu.setVisibility(View.GONE);
-                    mFabMenu.close(false);
+                    mFabFixedTask.setVisibility(View.GONE);
+
 
                     bottomBar.setVisibility(View.VISIBLE);
                 } else {
@@ -303,7 +289,7 @@ public class FixedTaskTimeLine extends Fragment implements LoaderManager.LoaderC
     public void resetUI() {
         getActivity().setTitle("FlexiTask");
         bottomBar.setVisibility(View.GONE);
-        mFabMenu.setVisibility(View.VISIBLE);
+        mFabFixedTask.setVisibility(View.VISIBLE);
         toolBarShown = false;
     }
 

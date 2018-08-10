@@ -148,6 +148,8 @@ public class FixedTaskEditor extends AppCompatActivity implements LoaderManager.
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        getTheme().applyStyle(R.style.OverlayPrimaryColorGreen, true);
         setContentView(R.layout.activity_fixed_task_editor);
 
         android.support.v7.widget.Toolbar toolbar = findViewById(R.id.toolbar);

@@ -28,8 +28,6 @@ import android.widget.ListView;
 
 import com.example.android.flexitask.data.taskContract;
 import com.example.android.flexitask.data.taskDBHelper;
-import com.github.clans.fab.FloatingActionButton;
-import com.github.clans.fab.FloatingActionMenu;
 
 import java.util.Calendar;
 
@@ -41,22 +39,16 @@ import java.util.Calendar;
  * that implements the {@link LoaderManager] interface to pass flexi task data to the a cursor
  * adaptor for the fragment's listview..
  *
- * Code for floating ActionButton, including animations and design from GitHub
- * https://github.com/Clans/FloatingActionButton
- *
  */
 public class FlexiTaskTimeLine extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int TASKLOADER = 0;
     TaskCursorAdaptor mTaskCursorAdaptor;
 
-    /**
-     * Floating Action Buttons from
-     * https://github.com/Clans/FloatingActionButton
-     */
-    private FloatingActionButton mFabFixedTask;
-    private FloatingActionButton mFabFlexi;
-    private FloatingActionMenu mFabMenu;
+
+    //private FloatingActionButton mFabFixedTask;
+    private android.support.design.widget.FloatingActionButton mFabFlexi;
+
 
     /**
      * Database helper that provides access to the database
@@ -88,7 +80,7 @@ public class FlexiTaskTimeLine extends Fragment implements LoaderManager.LoaderC
         // Find the ListView which will be populated with the tasks data
         final ListView timeLineListView = (ListView) rootView.findViewById(R.id.timelineListView);
 
-        mFabMenu = (FloatingActionMenu) rootView.findViewById(R.id.menu);
+
 
         mDbHelper = new taskDBHelper(getActivity());
 
@@ -106,21 +98,12 @@ public class FlexiTaskTimeLine extends Fragment implements LoaderManager.LoaderC
         bottomBar = rootView.findViewById(R.id.toolbar);
 
 
-        mFabFixedTask = (FloatingActionButton) rootView.findViewById(R.id.fixedTaskButton);
-        mFabFixedTask.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), FixedTaskEditor.class);
-                mFabMenu.close(false);
-                startActivity(intent);
-            }
-        });
-        mFabFlexi = (FloatingActionButton) rootView.findViewById(R.id.flexiTaskButton);
+
+        mFabFlexi = (android.support.design.widget.FloatingActionButton) rootView.findViewById(R.id.flexiFab);
         mFabFlexi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), FlexiTaskEditor.class);
-                mFabMenu.close(false);
                 startActivity(intent);
             }
         });
@@ -142,8 +125,8 @@ public class FlexiTaskTimeLine extends Fragment implements LoaderManager.LoaderC
 
                     getActivity().setTitle("task selected");
                     toolBarShown = true;
-                    mFabMenu.setVisibility(View.GONE);
-                    mFabMenu.close(false);
+                    mFabFlexi.setVisibility(View.GONE);
+
 
                     bottomBar.setVisibility(View.VISIBLE);
                 } else {
@@ -277,7 +260,7 @@ public class FlexiTaskTimeLine extends Fragment implements LoaderManager.LoaderC
     public void resetUI() {
         getActivity().setTitle("FlexiTask");
         bottomBar.setVisibility(View.GONE);
-        mFabMenu.setVisibility(View.VISIBLE);
+        mFabFlexi.setVisibility(View.VISIBLE);
         toolBarShown = false;
     }
 
@@ -295,7 +278,7 @@ public class FlexiTaskTimeLine extends Fragment implements LoaderManager.LoaderC
             case R.id.deleteAll:
                 //FOR DEBUGGING PURPOSES
                 bottomBar.setVisibility(View.GONE);
-                mFabMenu.setVisibility(View.VISIBLE);
+                mFabFlexi.setVisibility(View.VISIBLE);
                 deleteAllTasks();
                 return true;
         }

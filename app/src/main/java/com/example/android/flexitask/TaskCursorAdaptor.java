@@ -2,6 +2,7 @@ package com.example.android.flexitask;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +31,10 @@ import java.util.concurrent.TimeUnit;
  */
 public class TaskCursorAdaptor extends CursorAdapter {
 
+    private int lowPriority;
+    private int medPriority;
+    private int highPriority;
+
     /**
      * Is an adapter for a listview
      * that uses a {@link Cursor} to retrieve data from the tasks table{@link taskDBHelper}.
@@ -55,6 +60,41 @@ public class TaskCursorAdaptor extends CursorAdapter {
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
 
+        String colourSetting = PreferenceManager.getDefaultSharedPreferences(context)
+                .getString("color_preference_key", "OCOLOUR");
+
+        switch (colourSetting) {
+            case ("DCOLOUR"):
+                lowPriority = R.color.lowPriorityD;
+                medPriority = R.color.medPriorityD;
+                highPriority = R.color.highPriorityD;
+
+                break;
+
+            case ("PCOLOUR"):
+
+                lowPriority = R.color.lowPriorityP;
+                medPriority = R.color.medPriorityP;
+                highPriority = R.color.highPriorityP;
+
+                break;
+
+            case ("TCOLOUR"):
+
+                lowPriority = R.color.lowPriorityT;
+                medPriority = R.color.medPriorityT;
+                highPriority = R.color.highPriorityT;
+
+                break;
+            default:
+
+                lowPriority = R.color.greenPriority;
+                medPriority = R.color.yellowPriority;
+                highPriority = R.color.redPriority;
+        }
+
+
+
         return LayoutInflater.from(context).inflate(R.layout.list_item, parent, false);
     }
 
@@ -72,6 +112,8 @@ public class TaskCursorAdaptor extends CursorAdapter {
     @Override
 
     public void bindView(View view, Context context, Cursor cursor) {
+
+
         //find the views for the list item
         TextView titleTextView = view.findViewById(R.id.titleListView);
         TextView descriptionTextView = view.findViewById(R.id.descriptionListView);
@@ -160,19 +202,19 @@ public class TaskCursorAdaptor extends CursorAdapter {
         //if 75% until due, set green priority
         if (priorityRating < 0.75) {
 
-            priorityLine.setBackgroundResource(R.color.greenPriority);
+            priorityLine.setBackgroundResource(lowPriority);
 
         }
         //if between 75% and 150%, set yellow priority
         else if (priorityRating > 0.75 && priorityRating < 1.5) {
 
-            priorityLine.setBackgroundResource(R.color.yellowPriority);
+            priorityLine.setBackgroundResource(medPriority);
 
         }
         //if between over 150%, set red (URGENT) priority
         else {
 
-            priorityLine.setBackgroundResource(R.color.redPriority);
+            priorityLine.setBackgroundResource(highPriority);
 
         }
     }

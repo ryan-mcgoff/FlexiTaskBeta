@@ -6,29 +6,17 @@
         android:key="@string/color_preference_key"
         android:title="@string/color_preference_title"
         android:dialogTitle="@string/color_preference_title"
+        android:summary="@string/color_summary"
         android:entries="@array/colorEntries"
         android:entryValues="@array/colorValueEntries"
         android:defaultValue="@string/color_default_value"
     />
 
-    <CheckBoxPreference
-
-        android:key="alarm"
-
-        android:title="Sound a Lunch Alarm"
-
-        android:summary="Check if you want to know when it is time for lunch" />
 
     <com.example.android.flexitask.TimePreference
         android:key="some_time"
-        android:title="Set some time"
+        android:title="Daily Notification"
         android:defaultValue="12:00"
-        android:summary="Set some time"/>
-
-
-
-
-
-
+        android:summary="Select when you want to recieve a daily summary"/>
 
 </PreferenceScreen>
