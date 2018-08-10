@@ -11,4 +11,24 @@
         android:defaultValue="@string/color_default_value"
     />
 
+    <CheckBoxPreference
+
+        android:key="alarm"
+
+        android:title="Sound a Lunch Alarm"
+
+        android:summary="Check if you want to know when it is time for lunch" />
+
+    <com.example.android.flexitask.TimePreference
+        android:key="some_time"
+        android:title="Set some time"
+        android:defaultValue="12:00"
+        android:summary="Set some time"/>
+
+
+
+
+
+
+
 </PreferenceScreen>

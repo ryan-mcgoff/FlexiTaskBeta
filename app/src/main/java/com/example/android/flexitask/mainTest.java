@@ -17,8 +17,11 @@ import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import java.util.Calendar;
 
@@ -35,10 +38,23 @@ public class mainTest extends AppCompatActivity implements NavigationView.OnNavi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.maintest);
 
+        Log.e("main: ","MAIN YO");
+
+
+
+
         notificationManager = NotificationManagerCompat.from(this);
 
         //testNotification();
-        startAlarm();
+        //startAlarm();
+
+
+        //startAlarm();
+
+        //startssAlarm();
+
+        setAlarm();
+
 
 
 
@@ -55,19 +71,67 @@ public class mainTest extends AppCompatActivity implements NavigationView.OnNavi
 
     }
 
-    private void startAlarm(){
+    private void startssAlarm(){
         long alarmTime = Calendar.getInstance().getTimeInMillis();
         alarmTime += 60000;
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(this,AlertReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this,1,intent,0);
-        
-            alarmManager.set(AlarmManager.RTC_WAKEUP,alarmTime,pendingIntent);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this,1,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+
+
+
+        // every day at hour specified by user in settings
+        Calendar calendar = Calendar.getInstance();
+
+
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        ///get number
+
+        String alarmS = PreferenceManager.getDefaultSharedPreferences(this).getString("some_time", "08:00");
+
+        String[] timeArray = alarmS.split(":");
+        int hour = (Integer.parseInt(timeArray[0]));
+        int min = (Integer.parseInt(timeArray[1]));
+
+        // if it's after or equal 9 am schedule for next day
+        if (Calendar.getInstance().get(Calendar.HOUR_OF_DAY) >= hour) {
+            Log.e("Hour Now : ", String.valueOf(Calendar.getInstance().get(Calendar.HOUR_OF_DAY)+
+            " Hour Set"+ String.valueOf(hour)));
+            calendar.add(Calendar.DAY_OF_YEAR, 1); //add day
+        }
+        else{
+            Log.e("alarm: ", "Alarm will schedule for today!");
+        }
+
+        calendar.set(Calendar.HOUR_OF_DAY, hour);
+        calendar.set(Calendar.MINUTE, min);
+
+
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                AlarmManager.INTERVAL_DAY, pendingIntent);
+
+
 
 
     }
 
-    private void cancelAlarm(){
+
+        public void setAlarm(){
+
+            Log.e("setAlarm: ", "alarm d");
+
+            long c = Calendar.getInstance().getTimeInMillis();
+            c+= 15000;
+
+            AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+            Intent intent = new Intent(this,AlertReceiver.class);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(this,1,intent,0);
+
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP,c,pendingIntent);
+
+        }
+
+    private void cancelsAlarm(){
 
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(this,AlertReceiver.class);
@@ -84,7 +148,7 @@ public class mainTest extends AppCompatActivity implements NavigationView.OnNavi
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         displayView(item.getItemId());
-        Log.v(String.valueOf("te"),"MainTest" );
+
         return true;
     }
 

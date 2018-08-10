@@ -16,6 +16,7 @@ public class AppSettings {
     }
 
     public String getPreference(){
+
         return mSharedPreferences.getString("storage","default");
     }
     public void setSharedPreferences(String value){
