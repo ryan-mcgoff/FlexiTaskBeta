@@ -9,35 +9,24 @@ import android.content.res.TypedArray;
 import android.support.v7.preference.DialogPreference;
 import android.util.AttributeSet;
 
-public class TimePreference extends DialogPreference
-{
+public class TimePreferenceObject extends DialogPreference {
+
     public int hour = 0;
     public int minute = 0;
 
-    public static int parseHour(String value)
-    {
-        try
-        {
-            String[] time = value.split(":");
-            return (Integer.parseInt(time[0]));
-        }
-        catch (Exception e)
-        {
-            return 0;
-        }
+    public static int hourStrToInt(String value) {
+
+            String[] timeArray = value.split(":");
+            int hourInt =  (Integer.parseInt(timeArray[0]));
+            return hourInt;
+
     }
 
-    public static int parseMinute(String value)
-    {
-        try
-        {
-            String[] time = value.split(":");
-            return (Integer.parseInt(time[1]));
-        }
-        catch (Exception e)
-        {
-            return 0;
-        }
+    public static int minStrToInt(String value){
+            String[] timeArray = value.split(":");
+            int minInt = (Integer.parseInt(timeArray[1]));
+            return minInt;
+
     }
 
     public static String timeToString(int h, int m)
@@ -45,15 +34,15 @@ public class TimePreference extends DialogPreference
         return String.format("%02d", h) + ":" + String.format("%02d", m);
     }
 
-    public TimePreference(Context context, AttributeSet attrs)
+    public TimePreferenceObject(Context context, AttributeSet attrs)
     {
         super(context, attrs);
     }
 
     @Override
-    protected Object onGetDefaultValue(TypedArray a, int index)
-    {
-        return a.getString(index);
+    protected Object onGetDefaultValue(TypedArray typedArray, int i) {
+
+        return typedArray.getString(i);
     }
 
     @Override
@@ -65,13 +54,12 @@ public class TimePreference extends DialogPreference
             if (defaultValue == null) value = getPersistedString("00:00");
             else value = getPersistedString(defaultValue.toString());
         }
-        else
-        {
+        else {
             value = defaultValue.toString();
         }
 
-        hour = parseHour(value);
-        minute = parseMinute(value);
+        hour = hourStrToInt(value);
+        minute = minStrToInt(value);
     }
 
     public void persistStringValue(String value)

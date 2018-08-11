@@ -4,6 +4,7 @@ package com.example.android.flexitask;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
@@ -14,6 +15,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -100,6 +102,9 @@ public class FlexiTaskTimeLine extends Fragment implements LoaderManager.LoaderC
 
 
         mFabFlexi = (android.support.design.widget.FloatingActionButton) rootView.findViewById(R.id.flexiFab);
+
+        colorSwitch();
+
         mFabFlexi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -241,6 +246,31 @@ public class FlexiTaskTimeLine extends Fragment implements LoaderManager.LoaderC
 
         return rootView;
 
+    }
+
+    private void colorSwitch() {
+        String colourSetting = PreferenceManager.getDefaultSharedPreferences(getContext())
+                .getString("color_preference_key", "OCOLOUR");
+
+        switch (colourSetting) {
+            case ("DCOLOUR"):
+                mFabFlexi.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorAccentD)));
+
+                break;
+
+            case ("PCOLOUR"):
+
+                mFabFlexi.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorAccentP)));
+
+                break;
+
+            case ("TCOLOUR"):
+                mFabFlexi.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorAccentT)));
+
+                break;
+            default:
+                mFabFlexi.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorAccent)));
+        }
     }
 
     /**

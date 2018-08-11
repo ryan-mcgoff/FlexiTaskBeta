@@ -29,7 +29,6 @@
                 android:value=".mainTest" />
         </activity>
         <activity android:name=".FlexiTaskEditor" />
-        <activity android:name=".DailyNotificationReminder" />
 
         <provider
             android:name=".data.TaskProvider"

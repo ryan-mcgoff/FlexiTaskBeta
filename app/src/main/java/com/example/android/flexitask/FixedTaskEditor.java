@@ -9,7 +9,9 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -110,6 +112,9 @@ public class FixedTaskEditor extends AppCompatActivity implements LoaderManager.
     private int currentHour;
     private int currentMin;
 
+    private android.support.v7.widget.Toolbar toolbar;
+    private AppBarLayout appbar;
+
 
     /**
      * Boolean flag that keeps track of whether the Task has been edited (true) or not (false)
@@ -149,10 +154,13 @@ public class FixedTaskEditor extends AppCompatActivity implements LoaderManager.
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        getTheme().applyStyle(R.style.OverlayPrimaryColorGreen, true);
+
         setContentView(R.layout.activity_fixed_task_editor);
 
-        android.support.v7.widget.Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
+        appbar = findViewById(R.id.appbar);
+        colorSwitch();
+
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -517,6 +525,36 @@ public class FixedTaskEditor extends AppCompatActivity implements LoaderManager.
         timeLabel.setText(mTime);
 
     }
+
+    private void colorSwitch() {
+        String colourSetting = PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+                .getString("color_preference_key", "OCOLOUR");
+
+        switch (colourSetting) {
+            case ("DCOLOUR"):
+                toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimaryD));
+                appbar.setBackgroundColor(getResources().getColor(R.color.colorPrimaryD));
+
+                break;
+
+            case ("PCOLOUR"):
+
+                toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimaryP));
+                appbar.setBackgroundColor(getResources().getColor(R.color.colorPrimaryP));
+
+                break;
+
+            case ("TCOLOUR"):
+                toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimaryT));
+                appbar.setBackgroundColor(getResources().getColor(R.color.colorPrimaryT));
+
+                break;
+            default:
+                toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                appbar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        }
+    }
+
 
 
     /**

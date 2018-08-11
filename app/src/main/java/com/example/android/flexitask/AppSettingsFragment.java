@@ -4,11 +4,6 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-
-
-import com.example.android.flexitask.R;
 
 /**
  * Created by rymcg on 6/08/2018.
@@ -20,7 +15,7 @@ public class AppSettingsFragment extends PreferenceFragmentCompat {
     @Override
     public void onDisplayPreferenceDialog(Preference preference) {
         DialogFragment dialogFragment = null;
-        if (preference instanceof TimePreference)
+        if (preference instanceof TimePreferenceObject)
         {
             dialogFragment = new TimePreferenceDialogFragmentCompat();
             Bundle bundle = new Bundle(1);

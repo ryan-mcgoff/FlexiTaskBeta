@@ -22,7 +22,7 @@ https://github.com/Clans/FloatingActionButton-->
             android:layout_height="match_parent"
             android:choiceMode="singleChoice"
             android:clipToPadding="false"
-            android:paddingBottom="?actionBarSize"
+            android:paddingBottom="56dp"
             android:scrollbarStyle="outsideOverlay" />
 
     </RelativeLayout>
@@ -91,7 +91,7 @@ https://github.com/Clans/FloatingActionButton-->
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:src="@drawable/fab_add"
-        android:tint="@color/colorPrimary"
+        android:tint="@color/whiteC"
         app:backgroundTint="@color/colorAccent"
         app:fab_size="normal"/>
 
@@ -101,7 +101,7 @@ https://github.com/Clans/FloatingActionButton-->
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
+        android:layout_height="56dp"
         android:layout_alignParentBottom="true"
         android:background="@color/toolBarColor"
         android:contentDescription="ToolBar"

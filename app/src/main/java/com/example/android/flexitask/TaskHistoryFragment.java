@@ -1,7 +1,6 @@
 package com.example.android.flexitask;
 
 import android.database.Cursor;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,13 +8,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.example.android.flexitask.data.taskContract;
@@ -24,9 +23,14 @@ import com.example.android.flexitask.data.taskDBHelper;
 import java.util.Calendar;
 
 /**
- * Created by rymcg on 21/07/2018.
+ * Created by Ryan Mcgoff (4086944), Jerry Kumar (3821971), Jaydin Mcmullan (9702973)
+ *
+ * A {@link Fragment} subclass for the history fragment of the app
+ * that implements the {@link LoaderManager] interface to deactived task data to the a cursor
+ * adaptor for the fragment's listview.
+ *
+ *
  */
-
 public class TaskHistoryFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int TASKLOADER = 0;
@@ -44,6 +48,8 @@ public class TaskHistoryFragment extends Fragment implements LoaderManager.Loade
     private long dateFilter;
     private int taskFilter;
 
+    private int selectedDrawableID;
+
 
     @Nullable
     @Override
@@ -51,20 +57,21 @@ public class TaskHistoryFragment extends Fragment implements LoaderManager.Loade
          super.onCreateView(inflater, container, savedInstanceState);
 
 
-        getContext().getTheme().applyStyle(R.style.OverlayPrimaryColorGreen, true);
-
-
         rootView = inflater.inflate(R.layout.fragment_task_history, container, false);
+
+
+        //checks colour preferences set by the user and makes appropriate changes
+        checkColourChange();
 
         todayDate = Calendar.getInstance().getTimeInMillis();
         dateFilter = todayDate;
         taskFilter = taskContract.TaskEntry.TYPE_ALL;
 
         timeBtnSelected = rootView.findViewById(R.id.btnAnyTime);
-        timeBtnSelected.setBackgroundResource(R.drawable.oval_shape_selected);
+        timeBtnSelected.setBackgroundResource(selectedDrawableID);
 
         taskBtnSelected = rootView.findViewById(R.id.btnAllTasks);
-        taskBtnSelected.setBackgroundResource(R.drawable.oval_shape_selected);
+        taskBtnSelected.setBackgroundResource(selectedDrawableID);
 
 
         mDbHelper = new taskDBHelper(getActivity());
@@ -80,6 +87,8 @@ public class TaskHistoryFragment extends Fragment implements LoaderManager.Loade
         RadioGroup timeButtonGroup = rootView.findViewById(R.id.btnTimeGroup);
         RadioGroup taskButtonGroup = rootView.findViewById(R.id.btnTaskGroup);
 
+
+        /*Checks which time filter the user selects and restarts loader to fetch this data*/
         timeButtonGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -115,6 +124,7 @@ public class TaskHistoryFragment extends Fragment implements LoaderManager.Loade
             }
         });
 
+        /*Checks which history a user wants for a task  the user wants and restarts loader to fetch this data*/
         taskButtonGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -144,24 +154,52 @@ public class TaskHistoryFragment extends Fragment implements LoaderManager.Loade
         return rootView;
     }
 
+    /**
+     * Method changes colours for the history fragment based on what colour blind mode the user has selected
+     */
+    private void checkColourChange() {
+        String colourSetting = PreferenceManager.getDefaultSharedPreferences(getContext())
+                .getString("color_preference_key", "OCOLOUR");
+
+        switch (colourSetting) {
+            case ("DCOLOUR"):
+                selectedDrawableID = R.drawable.oval_shape_selected_d;
+
+                break;
+
+            case ("PCOLOUR"):
+                selectedDrawableID = R.drawable.oval_shape_selected_p;
+                break;
+
+            case ("TCOLOUR"):
+                selectedDrawableID = R.drawable.oval_shape_selected_t;
+
+                break;
+            default:
+                selectedDrawableID = R.drawable.oval_shape_selected;
+        }
+    }
+
     private void timeBtnSelectDeselect(int checkID){
         timeBtnDeselect = timeBtnSelected;
         timeBtnSelected = rootView.findViewById(checkID);
         timeBtnDeselect.setBackgroundResource(R.drawable.oval_shape);
-        timeBtnSelected.setBackgroundResource(R.drawable.oval_shape_selected);
+        timeBtnSelected.setBackgroundResource(selectedDrawableID);
     }
     private void taskBtnSelectDeselect(int checkID){
         taskBtnDeselect = taskBtnSelected;
         taskBtnSelected = rootView.findViewById(checkID);
         taskBtnDeselect.setBackgroundResource(R.drawable.oval_shape);
-        taskBtnSelected.setBackgroundResource(R.drawable.oval_shape_selected);
+        taskBtnSelected.setBackgroundResource(selectedDrawableID);
     }
 
+
+    //Loaders that retrieve data
     @NonNull
     @Override
     public Loader<Cursor> onCreateLoader(int id, @Nullable Bundle args) {
 
-        //Define a projection that specifies which columns from the database
+        //Defines a projection that specifies which columns from the database
         // you will actually use after this query.
         String[] projection = {
                 taskContract.TaskEntry._ID,

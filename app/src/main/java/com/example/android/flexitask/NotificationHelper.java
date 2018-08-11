@@ -9,6 +9,9 @@ import android.content.ContextWrapper;
 import android.graphics.Color;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
+
+import java.util.ArrayList;
 
 /**
  * Created by rymcg on 10/08/2018.
@@ -50,12 +53,37 @@ public class NotificationHelper extends ContextWrapper {
         return mNotificationManager;
     }
 
-    public NotificationCompat.Builder getChannel(String title, String message){
+    public NotificationCompat.Builder getChannel(String title, ArrayList <String> message){
 
-        return new NotificationCompat.Builder(getApplicationContext(),CHANNELID)
+
+
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplicationContext(),CHANNELID)
                 .setContentTitle(title)
-                .setContentText(message)
+                .setContentText("contentText")
                 .setSmallIcon(R.drawable.ic_launcher_background);
+        NotificationCompat.InboxStyle inboxStyle =
+                new NotificationCompat.InboxStyle();
+
+
+// Sets a title for the Inbox in expanded layout
+        inboxStyle.setBigContentTitle("Schedule:");
+
+        if(message.size()==0){
+            Log.e("alarm: ", "Nothing");
+            inboxStyle.addLine("No upcoming events!");
+        }
+        else {
+
+            for (int i = 0; i < message.size(); i++) {
+                if (message.get(i) != null) {
+                    inboxStyle.addLine(message.get(i));
+                }
+            }
+        }
+// Moves the expanded layout object into the notification object.
+        mBuilder.setStyle(inboxStyle);
+
+        return mBuilder;
         //set Icon Later
 
     }

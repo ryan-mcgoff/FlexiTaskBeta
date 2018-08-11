@@ -13,10 +13,10 @@
     />
 
 
-    <com.example.android.flexitask.TimePreference
+    <com.example.android.flexitask.TimePreferenceObject
         android:key="some_time"
         android:title="Daily Notification"
-        android:defaultValue="12:00"
+        android:defaultValue="8:00"
         android:summary="Select when you want to recieve a daily summary"/>
 
 </PreferenceScreen>

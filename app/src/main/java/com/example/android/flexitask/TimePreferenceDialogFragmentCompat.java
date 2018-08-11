@@ -1,6 +1,9 @@
 package com.example.android.flexitask;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.preference.DialogPreference;
 import android.support.v7.preference.PreferenceDialogFragmentCompat;
 import android.util.Log;
@@ -11,14 +14,13 @@ import android.widget.TimePicker;
  * Created by rymcg on 9/08/2018.
  */
 
-    import android.content.Context;
-import android.support.v7.preference.DialogPreference;
 import android.support.v7.preference.Preference;
-import android.support.v7.preference.PreferenceDialogFragmentCompat;
-import android.view.View;
-import android.widget.TimePicker;
 
-    public class TimePreferenceDialogFragmentCompat extends PreferenceDialogFragmentCompat implements DialogPreference.TargetFragment
+import java.util.Calendar;
+
+import static android.content.Context.ALARM_SERVICE;
+
+public class TimePreferenceDialogFragmentCompat extends PreferenceDialogFragmentCompat implements DialogPreference.TargetFragment
     {
         TimePicker timePicker = null;
 
@@ -34,27 +36,68 @@ import android.widget.TimePicker;
         {
             super.onBindDialogView(v);
             timePicker.setIs24HourView(true);
-            TimePreference pref = (TimePreference) getPreference();
+            TimePreferenceObject pref = (TimePreferenceObject) getPreference();
             timePicker.setCurrentHour(pref.hour);
             timePicker.setCurrentMinute(pref.minute);
         }
 
         @Override
-        public void onDialogClosed(boolean positiveResult)
+        public void onDialogClosed(boolean dialogChanged)
         {
-            if (positiveResult)
+            if (dialogChanged)
             {
-                TimePreference pref = (TimePreference) getPreference();
-                pref.hour = timePicker.getCurrentHour();
-                pref.minute = timePicker.getCurrentMinute();
+                TimePreferenceObject preference = (TimePreferenceObject) getPreference();
+                preference.hour = timePicker.getCurrentHour();
+                preference.minute = timePicker.getCurrentMinute();
 
-                Log.v("TimePicker: ",String.valueOf(pref.hour)+ " : "+ String.valueOf(pref.minute) );
+                int hour = timePicker.getCurrentHour();
+                int min = timePicker.getCurrentMinute();
 
+                //sets alarm
+                setAlarm(hour,min);
 
-
-                String value = TimePreference.timeToString(pref.hour, pref.minute);
-                if (pref.callChangeListener(value)) pref.persistStringValue(value);
+                String value = TimePreferenceObject.timeToString(preference.hour, preference.minute);
+                if (preference.callChangeListener(value)){
+                    preference.persistStringValue(value);
+                }
             }
+        }
+
+        public void setAlarm(int hour, int min){
+
+            Log.e("setAlarm In Dialog: ", "alarm d");
+
+            // Current time
+            Calendar todayC = Calendar.getInstance();
+
+            Calendar timePickerC = (Calendar) todayC.clone();
+            timePickerC.set(Calendar.HOUR_OF_DAY, hour);
+            timePickerC.set(Calendar.MINUTE, min);
+
+
+
+            Log.e("alarm: ", "SYSTEM HOUR: " + String.valueOf(Calendar.getInstance().get(Calendar.HOUR_OF_DAY) + " GIVEN HOUR:  " +
+                    String.valueOf(hour)));
+
+            Log.e("alarm: ", "SYSTEM MIN: " + String.valueOf(Calendar.getInstance().get(Calendar.MINUTE) + " GIVEN MIN:  " +
+                    String.valueOf(min)));
+
+
+            // if it's after or equal to the notification hour / min schedule for next day
+            if (todayC.after(timePickerC)){
+                timePickerC.add(Calendar.DAY_OF_YEAR, 1); //add day
+                Log.e("alarm: ", "Alarm will schedule for tomorrow!");
+            }
+            else{
+                Log.e("alarm: ", "Alarm will schedule for today!");
+            }
+
+            AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(ALARM_SERVICE);
+            Intent intent = new Intent(getContext(),AlertReceiver.class);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(),1,intent,0);
+
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP,timePickerC.getTimeInMillis(),pendingIntent);
+
         }
 
         @Override

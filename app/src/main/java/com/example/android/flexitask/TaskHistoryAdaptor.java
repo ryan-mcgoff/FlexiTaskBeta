@@ -10,6 +10,10 @@ import android.widget.TextView;
 
 import com.example.android.flexitask.data.taskContract;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 /**
  * Created by rymcg on 26/07/2018.
  */
@@ -35,16 +39,32 @@ public class TaskHistoryAdaptor extends CursorAdapter {
 
         //find the column values
         int titleColumnIndex = cursor.getColumnIndex(taskContract.TaskEntry.COLUMN_TASK_TITLE);
-        int descriptionColumnIndex = cursor.getColumnIndex(taskContract.TaskEntry.COLUMN_DESCRIPTION);
+        int descriptionColumnIndex = cursor.getColumnIndex(taskContract.TaskEntry.COLUMN_TYPE_TASK);
         int lastCompletedIndex = cursor.getColumnIndex(taskContract.TaskEntry.COLUMN_LAST_COMPLETED);
 
         //Read the values for current Tasks
         String titleString = cursor.getString(titleColumnIndex);
-        String descriptionString = cursor.getString(descriptionColumnIndex);
+
+
+        int type = cursor.getInt(descriptionColumnIndex);
+        String descriptionString = "";
+
+        if(type==(taskContract.TaskEntry.TYPE_FIXED)){
+            descriptionString = "Fixed Task";
+
+        }
+        else{
+            descriptionString = "Flexi Task";
+
+        }
+
         //int taskType = cursor.getInt(taskTypeColumnIndex);
         long lastCompletedLong = cursor.getLong(lastCompletedIndex);
 
-        dateView.setText(String.valueOf(lastCompletedIndex));
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        String dateString = formatter.format(new Date(lastCompletedLong));
+
+        dateView.setText(dateString);
         titleTextView.setText(titleString);
         descriptionTextView.setText(descriptionString);
 

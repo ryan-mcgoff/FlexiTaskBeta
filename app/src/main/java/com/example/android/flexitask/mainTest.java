@@ -5,6 +5,8 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -55,10 +57,12 @@ public class mainTest extends AppCompatActivity implements NavigationView.OnNavi
 
         notificationManager = NotificationManagerCompat.from(this);
 
-        android.support.v7.widget.Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
+        colorSwitch();
         setSupportActionBar(toolbar);
 
         drawerLayout = (DrawerLayout) findViewById(R.id.nav_draw);
+
         actionBarDrawerToggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,
                 R.string.navigation_drawer_open,R.string.navigation_drawer_close);
 
@@ -93,54 +97,6 @@ public class mainTest extends AppCompatActivity implements NavigationView.OnNavi
 
         //alarm manager
 
-
-    }
-
-
-
-
-    private void startssAlarm(){
-        long alarmTime = Calendar.getInstance().getTimeInMillis();
-        alarmTime += 60000;
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(this,AlertReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this,1,intent,PendingIntent.FLAG_UPDATE_CURRENT);
-
-
-
-        // every day at hour specified by user in settings
-        Calendar calendar = Calendar.getInstance();
-
-
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        ///get number
-
-        String alarmS = PreferenceManager.getDefaultSharedPreferences(this).getString("some_time", "08:00");
-
-        String[] timeArray = alarmS.split(":");
-        int hour = (Integer.parseInt(timeArray[0]));
-        int min = (Integer.parseInt(timeArray[1]));
-
-        // if it's after or equal 9 am schedule for next day
-        if (Calendar.getInstance().get(Calendar.HOUR_OF_DAY) >= hour) {
-            Log.e("Hour Now : ", String.valueOf(Calendar.getInstance().get(Calendar.HOUR_OF_DAY)+
-            " Hour Set"+ String.valueOf(hour)));
-            calendar.add(Calendar.DAY_OF_YEAR, 1); //add day
-        }
-        else{
-            Log.e("alarm: ", "Alarm will schedule for today!");
-        }
-
-        calendar.set(Calendar.HOUR_OF_DAY, hour);
-        calendar.set(Calendar.MINUTE, min);
-
-
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                AlarmManager.INTERVAL_DAY, pendingIntent);
-
-
-
-
     }
 
 
@@ -148,14 +104,35 @@ public class mainTest extends AppCompatActivity implements NavigationView.OnNavi
 
             Log.e("setAlarm: ", "alarm d");
 
-            long c = Calendar.getInstance().getTimeInMillis();
-            c+= 15000;
+
+            //get number
+            String alarmS = PreferenceManager.getDefaultSharedPreferences(this).getString("some_time", "08:00");
+
+            String[] timeArray = alarmS.split(":");
+            int hour = (Integer.parseInt(timeArray[0]));
+            int min = (Integer.parseInt(timeArray[1]));
+
+
+            Calendar todayC = Calendar.getInstance();
+
+            Calendar timePickerC = (Calendar) todayC.clone();
+            timePickerC.set(Calendar.HOUR_OF_DAY, hour);
+            timePickerC.set(Calendar.MINUTE, min);
+
+            // if it's after or equal to the notification hour / min schedule for next day
+            if (todayC.after(timePickerC)){
+                timePickerC.add(Calendar.DAY_OF_YEAR, 1); //add day
+                Log.e("alarm: ", "Alarm will schedule for tomorrow!");
+            }
+            else {
+                Log.e("alarm: ", "Alarm will schedule for today!");
+            }
 
             AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
             Intent intent = new Intent(this,AlertReceiver.class);
             PendingIntent pendingIntent = PendingIntent.getBroadcast(this,1,intent,0);
 
-            alarmManager.setExact(AlarmManager.RTC_WAKEUP,c,pendingIntent);
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP,timePickerC.getTimeInMillis(),pendingIntent);
 
         }
 
@@ -224,6 +201,31 @@ public class mainTest extends AppCompatActivity implements NavigationView.OnNavi
         //overwrites old notification id 1
         notificationManager.notify(1,notification);
 
+    }
+
+    private void colorSwitch() {
+        String colourSetting = PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+                .getString("color_preference_key", "OCOLOUR");
+
+        switch (colourSetting) {
+            case ("DCOLOUR"):
+                toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimaryD));
+
+                break;
+
+            case ("PCOLOUR"):
+
+                toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimaryP));
+
+                break;
+
+            case ("TCOLOUR"):
+                toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimaryT));
+
+                break;
+            default:
+                toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        }
     }
 
 

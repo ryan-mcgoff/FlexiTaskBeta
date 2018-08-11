@@ -10,11 +10,13 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
+import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 
 import com.example.android.flexitask.data.taskContract;
 import com.example.android.flexitask.data.taskDBHelper;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 /**
@@ -39,28 +41,35 @@ public class AlertReceiver extends BroadcastReceiver {
         Log.e("HEEE: ", "Inside onReceive method");
 
         //long today = Calendar.getInstance().getTimeInMillis();
-        String notificationMessage = "hey";
+        ArrayList <String> notificationMessage = new ArrayList<String>();
 
         //Creates a raw SQL statment to retrieve the recurring number and due date for the selected task
         Cursor cursorc = db.rawQuery("SELECT * FROM " + taskContract.TaskEntry.TABLE_NAME +
                 " WHERE " + taskContract.TaskEntry.COLUMN_TYPE_TASK
                 + " = " + taskContract.TaskEntry.TYPE_FLEXI, null);
         while (cursorc.moveToNext()) {
-            Log.e("alarm: ", "Inside getting stuff");
             int titleColumnIndex = cursorc.getColumnIndex(taskContract.TaskEntry.COLUMN_TASK_TITLE);
             String taskTitle = cursorc.getString(titleColumnIndex);
-            notificationMessage += " \n" +taskTitle;
+            notificationMessage.add(taskTitle);
 
         }
         NotificationHelper mNotificationHelper = new NotificationHelper(context);
         NotificationCompat.Builder nb = mNotificationHelper.getChannel("s",notificationMessage);
         mNotificationHelper.getNotificationManager().notify(1,nb.build());
 
-        long c = Calendar.getInstance().getTimeInMillis();
-        c+= 15000;
+        Calendar c = Calendar.getInstance();
+        String alarmS = PreferenceManager.getDefaultSharedPreferences(context).getString("some_time", "08:00");
+
+        String[] timeArray = alarmS.split(":");
+        int hour = (Integer.parseInt(timeArray[0]));
+        int min = (Integer.parseInt(timeArray[1]));
+        c.add(Calendar.DAY_OF_YEAR, 1); //add day
+
+        Log.e("alarm: ", "INSIDE DOING STUFF");
+
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context,1,intent,0);
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP,c,pendingIntent);
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP,c.getTimeInMillis(),pendingIntent);
     }
 }

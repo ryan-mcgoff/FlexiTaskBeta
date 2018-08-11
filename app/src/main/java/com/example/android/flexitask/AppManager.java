@@ -6,7 +6,7 @@ import android.app.NotificationManager;
 import android.os.Build;
 
 /**
- * Class initailised once app is started
+ * Class initailised once app is started, not currently used
  * Created by rymcg on 8/08/2018.
  */
 
@@ -32,7 +32,7 @@ public class AppManager extends Application {
 
             //create channels
             NotificationManager manager = getSystemService(NotificationManager.class);
-            manager.createNotificationChannel(channel1);
+           // manager.createNotificationChannel(channel1);
             ///channels for a list
 
         }

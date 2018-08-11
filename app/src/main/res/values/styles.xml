@@ -34,6 +34,27 @@
         <item name="colorAccent">@android:color/white</item>
     </style>
 
+    <style name="pTheme">
+        <item name="colorPrimary">@color/colorPrimaryP</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryP</item>
+        <item name="colorAccent">@color/colorAccentP</item>
+    </style>
+    <style name="dTheme">
+        <item name="colorPrimary">@color/colorPrimaryD</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryD</item>
+        <item name="colorAccent">@color/colorAccentD</item>
+    </style>
+    <style name="tTheme">
+        <item name="colorPrimary">@color/colorPrimaryT</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryT</item>
+        <item name="colorAccent">@color/colorAccentT</item>
+    </style>
+    <style name="oTheme">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimary</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
 
     <style name="MenuButtonsSmall">
 

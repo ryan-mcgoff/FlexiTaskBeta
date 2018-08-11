@@ -4,6 +4,7 @@ package com.example.android.flexitask;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
@@ -16,6 +17,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -29,8 +31,6 @@ import android.widget.ListView;
 
 import com.example.android.flexitask.data.taskContract;
 import com.example.android.flexitask.data.taskDBHelper;
-import com.github.clans.fab.FloatingActionButton;
-import com.github.clans.fab.FloatingActionMenu;
 
 import java.util.Calendar;
 
@@ -67,6 +67,7 @@ public class FixedTaskTimeLine extends Fragment implements LoaderManager.LoaderC
     private long lastClickedID;
 
 
+
     public FixedTaskTimeLine() {
     }
 
@@ -79,9 +80,15 @@ public class FixedTaskTimeLine extends Fragment implements LoaderManager.LoaderC
         View rootView = inflater.inflate(R.layout.fragment_fixed_task_timeline, container, false);
 
 
+
+
         mDbHelper = new taskDBHelper(getActivity());
 
         mFabFixedTask = rootView.findViewById(R.id.fixedFab);
+        colorSwitch();
+
+
+       // mFabFixedTask.setBac
 
         mFabFixedTask.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -195,7 +202,11 @@ public class FixedTaskTimeLine extends Fragment implements LoaderManager.LoaderC
                     //if there isn't a recurring period selected for that task, then delete it
                     if (recurringNumber == 0) {
                         currentTaskUri = ContentUris.withAppendedId(taskContract.TaskEntry.CONTENT_URI, item_iD);
-                        getActivity().getContentResolver().delete(currentTaskUri, null, null);
+                        ContentValues cv = new ContentValues();
+                        cv.put(taskContract.TaskEntry.COLUMN_STATUS, String.valueOf(0));
+
+                        db.update(taskContract.TaskEntry.TABLE_NAME, cv, taskContract.TaskEntry._ID
+                                + " = " + lastClickedID, null);
                     }
                     //if there is a recurring period for that task, and the task isn't
                     // overdue (date>todayDate) yet, then update the tasks due date then add the number of recurring days for the
@@ -241,7 +252,6 @@ public class FixedTaskTimeLine extends Fragment implements LoaderManager.LoaderC
             @Override
             public void onClick(View v) {
 
-
                 //creates a URI for the specific task that was clicked on
                 //ie: task on row three
                 //would be "content.example.android.flexitask/task" + "3" (the ID)
@@ -269,6 +279,32 @@ public class FixedTaskTimeLine extends Fragment implements LoaderManager.LoaderC
 
         return rootView;
 
+    }
+
+    private void colorSwitch() {
+        String colourSetting = PreferenceManager.getDefaultSharedPreferences(getContext())
+                .getString("color_preference_key", "OCOLOUR");
+
+        switch (colourSetting) {
+            case ("DCOLOUR"):
+                mFabFixedTask.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorAccentD)));
+
+                break;
+
+            case ("PCOLOUR"):
+
+
+                mFabFixedTask.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorAccentP)));
+
+                break;
+
+            case ("TCOLOUR"):
+                mFabFixedTask.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorAccentT)));
+
+                break;
+            default:
+                mFabFixedTask.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorAccent)));
+        }
     }
 
     /**
