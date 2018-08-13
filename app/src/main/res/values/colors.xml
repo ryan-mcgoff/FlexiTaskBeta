@@ -2,7 +2,8 @@
 <resources>
     <color name="colorPrimary">#2196F3</color>
     <color name="colorPrimaryDark">#1976D2</color>
-    <color name="colorAccent">#BBDEFB</color>
+    <color name="colorAccent">#F44336</color>
+    <color name = "colorSettings">#BBDEFB</color>
     <color name = "toolBarColor">#FFFFFF</color>
 
     <color name="greenPriority">#4caf50</color>
@@ -17,8 +18,8 @@
     <color name="colorPrimaryT">#5BDEB5</color>
     <color name="colorAccentT">#FFC107</color>
 
-    <color name="lowPriorityP">#D9C1C1</color>
-    <color name="medPriorityP">#A07171</color>
+    <color name="lowPriorityP">#A07171</color>
+    <color name="medPriorityP">#D9C1C1</color>
     <color name="highPriorityP">#4E4343</color>
     <color name="colorPrimaryP">#9F82C3</color>
     <color name="colorAccentP">#E4F05E</color>
