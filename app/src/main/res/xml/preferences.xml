@@ -8,6 +8,7 @@
         android:dialogTitle="@string/color_preference_title"
         android:summary="@string/color_summary"
         android:entries="@array/colorEntries"
+        android:contentDescription="Colour Adjustment"
         android:entryValues="@array/colorValueEntries"
         android:defaultValue="@string/color_default_value"
     />
@@ -17,6 +18,7 @@
         android:key="time"
         android:title="Daily Notification"
         android:defaultValue="8:00"
+        android:contentDescription="Time Picker for notifications"
         android:summary="Select when you want to recieve a daily summary"/>
 
 </PreferenceScreen>
