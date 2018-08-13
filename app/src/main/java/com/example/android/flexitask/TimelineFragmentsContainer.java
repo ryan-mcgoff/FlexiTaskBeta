@@ -80,6 +80,10 @@ public class TimelineFragmentsContainer extends Fragment {
 
         return rootView;
     }
+
+    /**
+     * Checks user colour preferences and makes appropriate UI changes
+     */
     private void colorSwitch() {
         String colourSetting = PreferenceManager.getDefaultSharedPreferences(getContext())
                 .getString("color_preference_key", "OCOLOUR");

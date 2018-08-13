@@ -323,7 +323,7 @@ public class FlexiTaskEditor extends AppCompatActivity implements LoaderManager.
         // and values from the editor are the values.
         ContentValues values = new ContentValues();
         values.put(taskContract.TaskEntry.COLUMN_TASK_TITLE, taskTitle);
-        values.put(taskContract.TaskEntry.COLUMN_DATE, 0);
+        values.put(taskContract.TaskEntry.COLUMN_DATE, mDueDate);
         values.put(taskContract.TaskEntry.COLUMN_LAST_COMPLETED, mDateLastCompleted);
         values.put(taskContract.TaskEntry.COLUMN_DESCRIPTION, descrption);
         values.put(taskContract.TaskEntry.COLUMN_HISTORY, "c");

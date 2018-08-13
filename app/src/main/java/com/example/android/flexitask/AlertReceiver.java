@@ -19,10 +19,12 @@ import com.example.android.flexitask.data.taskDBHelper;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-/**
- * Created by rymcg on 8/08/2018.
- */
 
+/**
+ * Created by Ryan Mcgoff (4086944), Jerry Kumar (3821971), Jaydin Mcmullan (9702973)
+ * This class is initialised by the Android system when an alarm is fired, the class
+ * uses {@link NotificationHelper} to create a notification to broadcast to the user's device.
+ */
 public class AlertReceiver extends BroadcastReceiver {
 
     private taskDBHelper mDbHelper;
@@ -35,38 +37,37 @@ public class AlertReceiver extends BroadcastReceiver {
         //channel 1 ignored on lower API <26
 
         mDbHelper = new taskDBHelper(context);
-
+        //Database Helper
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
-
-        Log.e("HEEE: ", "Inside onReceive method");
-
-        //long today = Calendar.getInstance().getTimeInMillis();
+        //Array list to store task titles;
         ArrayList <String> notificationMessage = new ArrayList<String>();
+        //todays date
+        long today = Calendar.getInstance().getTimeInMillis();
+        long m7DaysAhead = today + 604800000;
 
-        //Creates a raw SQL statment to retrieve the recurring number and due date for the selected task
+        //Cursors through the database to retrieve a list of over tasks and tasks due in the next 7 days
         Cursor cursorc = db.rawQuery("SELECT * FROM " + taskContract.TaskEntry.TABLE_NAME +
-                " WHERE " + taskContract.TaskEntry.COLUMN_TYPE_TASK
-                + " = " + taskContract.TaskEntry.TYPE_FLEXI, null);
+                " WHERE " + String.valueOf(m7DaysAhead) + " > " + taskContract.TaskEntry.COLUMN_DATE + " OR " +
+                String.valueOf(today)+" > " + taskContract.TaskEntry.COLUMN_DATE , null);
         while (cursorc.moveToNext()) {
             int titleColumnIndex = cursorc.getColumnIndex(taskContract.TaskEntry.COLUMN_TASK_TITLE);
             String taskTitle = cursorc.getString(titleColumnIndex);
             notificationMessage.add(taskTitle);
 
         }
+        //Calls notification helper to build notification, and then broadcasts it
         NotificationHelper mNotificationHelper = new NotificationHelper(context);
         NotificationCompat.Builder nb = mNotificationHelper.getChannel("s",notificationMessage);
         mNotificationHelper.getNotificationManager().notify(1,nb.build());
 
+        //Creates new alarm for daily notification for tomorrow based on the user's notification preferences
         Calendar c = Calendar.getInstance();
-        String alarmS = PreferenceManager.getDefaultSharedPreferences(context).getString("some_time", "08:00");
+        String alarmS = PreferenceManager.getDefaultSharedPreferences(context).getString("time", "08:00");
 
         String[] timeArray = alarmS.split(":");
         int hour = (Integer.parseInt(timeArray[0]));
         int min = (Integer.parseInt(timeArray[1]));
         c.add(Calendar.DAY_OF_YEAR, 1); //add day
-
-        Log.e("alarm: ", "INSIDE DOING STUFF");
-
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context,1,intent,0);

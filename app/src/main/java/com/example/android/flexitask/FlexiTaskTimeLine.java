@@ -193,9 +193,19 @@ public class FlexiTaskTimeLine extends Fragment implements LoaderManager.LoaderC
                     c.set(Calendar.SECOND, 0);
 
                     long todayDate = c.getTimeInMillis();
+                    //getlast complted + recurring days
+                    int lastCompletedColumnIndex = cursorc.getColumnIndex(taskContract.TaskEntry.COLUMN_LAST_COMPLETED);
+                    int RecurringColumnIndex = cursorc.getColumnIndex(taskContract.TaskEntry.COLUMN_RECCURING_PERIOD);
+
+                    // get the values from the Cursor for the given column index
+                    int mNumberOfRecurringDays = cursorc.getInt(RecurringColumnIndex);
+                    long mDateLastCompleted = cursorc.getLong(lastCompletedColumnIndex);
+                   long mDueDate = mDateLastCompleted + (86400000L * mNumberOfRecurringDays);
 
                     ContentValues cv = new ContentValues();
                     cv.put(taskContract.TaskEntry.COLUMN_LAST_COMPLETED, String.valueOf(todayDate));
+                    cv.put(taskContract.TaskEntry.COLUMN_DATE,String.valueOf(mDueDate));
+
                     db.update(taskContract.TaskEntry.TABLE_NAME, cv, taskContract.TaskEntry._ID
                             + " = " + lastClickedID, null);
                 }

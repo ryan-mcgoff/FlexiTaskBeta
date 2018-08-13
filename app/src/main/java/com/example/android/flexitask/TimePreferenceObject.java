@@ -1,9 +1,9 @@
 package com.example.android.flexitask;
 
 /**
- * Created by rymcg on 9/08/2018.
+ * Adapted from Dalija Prasnikar GITHub solution
+ * https://stackoverflow.com/questions/5533078/timepicker-in-preferencescreen/10608622.
  */
-
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.support.v7.preference.DialogPreference;
@@ -13,6 +13,7 @@ public class TimePreferenceObject extends DialogPreference {
 
     public int hour = 0;
     public int minute = 0;
+
 
     public static int hourStrToInt(String value) {
 

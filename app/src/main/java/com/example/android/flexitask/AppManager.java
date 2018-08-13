@@ -6,8 +6,9 @@ import android.app.NotificationManager;
 import android.os.Build;
 
 /**
- * Class initailised once app is started, not currently used
- * Created by rymcg on 8/08/2018.
+ * Class initailised once app is started, not currently used. Will apart of our "smarter implementation"
+ * plan for setting up notification channels
+ * Created by Ryan Mcgoff (4086944), Jerry Kumar (3821971), Jaydin Mcmullan (9702973)
  */
 
 public class AppManager extends Application {

@@ -106,7 +106,7 @@ public class mainTest extends AppCompatActivity implements NavigationView.OnNavi
 
 
             //get number
-            String alarmS = PreferenceManager.getDefaultSharedPreferences(this).getString("some_time", "08:00");
+            String alarmS = PreferenceManager.getDefaultSharedPreferences(this).getString("time", "08:00");
 
             String[] timeArray = alarmS.split(":");
             int hour = (Integer.parseInt(timeArray[0]));

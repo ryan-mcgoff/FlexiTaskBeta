@@ -526,6 +526,7 @@ public class FixedTaskEditor extends AppCompatActivity implements LoaderManager.
 
     }
 
+
     private void colorSwitch() {
         String colourSetting = PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
                 .getString("color_preference_key", "OCOLOUR");

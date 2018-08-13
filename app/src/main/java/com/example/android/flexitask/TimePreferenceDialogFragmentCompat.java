@@ -11,7 +11,8 @@ import android.view.View;
 import android.widget.TimePicker;
 
 /**
- * Created by rymcg on 9/08/2018.
+ * Adapted from Dalija Prasnikar GITHub solution
+ * https://stackoverflow.com/questions/5533078/timepicker-in-preferencescreen/10608622.
  */
 
 import android.support.v7.preference.Preference;

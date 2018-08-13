@@ -205,6 +205,8 @@ public class FixedTaskTimeLine extends Fragment implements LoaderManager.LoaderC
                         ContentValues cv = new ContentValues();
                         cv.put(taskContract.TaskEntry.COLUMN_STATUS, String.valueOf(0));
 
+                        cv.put(taskContract.TaskEntry.COLUMN_LAST_COMPLETED, todayDate);
+
                         db.update(taskContract.TaskEntry.TABLE_NAME, cv, taskContract.TaskEntry._ID
                                 + " = " + lastClickedID, null);
                     }

@@ -6,9 +6,11 @@ import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 
 /**
- * Created by rymcg on 6/08/2018.
+ * Created by Ryan Mcgoff (4086944), Jerry Kumar (3821971), Jaydin Mcmullan (9702973)
+ * This class handles the App settings, adding preferences from resource and implmenting the time
+ * dialog from https://stackoverflow.com/questions/5533078/timepicker-in-preferencescreen/10608622
+ * (CREDIT TO Dalija Prasnikar)
  */
-
 public class AppSettingsFragment extends PreferenceFragmentCompat {
 
 

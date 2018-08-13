@@ -14,7 +14,7 @@
 
 
     <com.example.android.flexitask.TimePreferenceObject
-        android:key="some_time"
+        android:key="time"
         android:title="Daily Notification"
         android:defaultValue="8:00"
         android:summary="Select when you want to recieve a daily summary"/>
