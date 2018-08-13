@@ -33,6 +33,8 @@ increase the result relativily more than a task with a higher frequnecy (ie: yea
 	            Recurring Frequency
 
 
+## Updated
+Now includes a history page that displays your previously completed tasks, colour blind options and daily notifications 
 
 ## Code used
 https://stackoverflow.com/questions/5533078/timepicker-in-preferencescreen/10608622
