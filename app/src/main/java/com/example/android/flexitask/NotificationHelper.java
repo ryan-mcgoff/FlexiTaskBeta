@@ -14,9 +14,10 @@ import android.util.Log;
 import java.util.ArrayList;
 
 /**
- * Created by rymcg on 10/08/2018.
+ * Created by Ryan Mcgoff (4086944), Jerry Kumar (3821971), Jaydin Mcmullan (9702973)
+ * Notification helper is in charge of creating channels (a requirement for devices running software higher than
+ * oreo) and creating the notification that alert receiver will broadcast.
  */
-
 public class NotificationHelper extends ContextWrapper {
     public static final String CHANNELID = "channel1ID";
     public static final String CHANNELNAME = "channel1";
@@ -24,6 +25,10 @@ public class NotificationHelper extends ContextWrapper {
     private NotificationManager mNotificationManager;
 
 
+    /**
+     * Creates a notification channel for devices running on Oreo or higher
+     * @param base
+     */
     public NotificationHelper(Context base) {
         super(base);
         if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.O) {
@@ -33,6 +38,7 @@ public class NotificationHelper extends ContextWrapper {
 
     @TargetApi(Build.VERSION_CODES.O)
     public void createChannels(){
+        //Creates channel
         NotificationChannel notificationChannel = new NotificationChannel(CHANNELID,CHANNELNAME,
                 NotificationManager.IMPORTANCE_DEFAULT);
         notificationChannel.enableLights(true);
@@ -43,16 +49,26 @@ public class NotificationHelper extends ContextWrapper {
         getNotificationManager().createNotificationChannel(notificationChannel);
     }
 
+    /**
+     * getter method for notification manager
+     * @return notification manager
+     */
     public NotificationManager getNotificationManager(){
 
         if (mNotificationManager==null){
             mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         }
-
         return mNotificationManager;
     }
 
+
+    /**
+     * Builds a notification for alter receiver to use
+     * @param title of the notification
+     * @param message for the getChannel() method to parse
+     * @return notification Builder object for alert receiver to broadcast
+     */
     public NotificationCompat.Builder getChannel(String title, ArrayList <String> message){
 
 
@@ -60,16 +76,15 @@ public class NotificationHelper extends ContextWrapper {
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplicationContext(),CHANNELID)
                 .setContentTitle(title)
                 .setContentText("contentText")
-                .setSmallIcon(R.drawable.ic_launcher_background);
+                .setSmallIcon(R.drawable.task_selector);
         NotificationCompat.InboxStyle inboxStyle =
                 new NotificationCompat.InboxStyle();
 
-
-// Sets a title for the Inbox in expanded layout
+        //Inbox Style notification (Expandable)
         inboxStyle.setBigContentTitle("Schedule:");
 
+        //If message is empty, set text to notify user there aren't any overdue or upcomming events
         if(message.size()==0){
-            Log.e("alarm: ", "Nothing");
             inboxStyle.addLine("No upcoming events!");
         }
         else {
@@ -80,11 +95,11 @@ public class NotificationHelper extends ContextWrapper {
                 }
             }
         }
-// Moves the expanded layout object into the notification object.
+
+        //Moves the expanded inbox style layout object into the notification object.
         mBuilder.setStyle(inboxStyle);
 
         return mBuilder;
-        //set Icon Later
 
     }
 }

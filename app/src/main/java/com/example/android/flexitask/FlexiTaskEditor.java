@@ -378,12 +378,14 @@ public class FlexiTaskEditor extends AppCompatActivity implements LoaderManager.
         return super.onOptionsItemSelected(item);
     }
 
+    /*Displays Due date in editor UI*/
     public void displayDueDate() {
         TextView dueDateDisplayLabel = findViewById(R.id.dueDateDisplayLabel);
         String chosenDateAsString = DateFormat.getDateInstance().format(mDueDate);
         dueDateDisplayLabel.setText(chosenDateAsString);
     }
 
+    /*Checks user colour preferences and changes UI*/
     private void colorSwitch() {
         String colourSetting = PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
                 .getString("color_preference_key", "OCOLOUR");

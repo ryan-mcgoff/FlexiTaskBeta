@@ -63,6 +63,7 @@ public class TaskCursorAdaptor extends CursorAdapter {
         String colourSetting = PreferenceManager.getDefaultSharedPreferences(context)
                 .getString("color_preference_key", "OCOLOUR");
 
+        //chooses Colour settings for priority
         switch (colourSetting) {
             case ("DCOLOUR"):
                 lowPriority = R.color.lowPriorityD;

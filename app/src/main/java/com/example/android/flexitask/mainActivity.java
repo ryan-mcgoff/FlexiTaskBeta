@@ -31,10 +31,13 @@ import android.widget.Toolbar;
 import java.util.Calendar;
 
 /**
- * Created by rymcg on 21/07/2018.
+ * Created by Ryan Mcgoff (4086944), Jerry Kumar (3821971), Jaydin Mcmullan (9702973)
+ * This class is the main class which acts as a container for all the fragments
+ * It inflates an XML layout which contains a nav draw, it then programtically checks for when an item in this
+ * nav draw is selected and switch the current fragment it is displaying with the new one.
+ * The class also sets up an alarm anytime the user opens the App (this will later be done by {@link AppManager}
  */
-
-public class mainTest extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class mainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private NotificationManagerCompat notificationManager;
     private DrawerLayout drawerLayout;
@@ -68,50 +71,25 @@ public class mainTest extends AppCompatActivity implements NavigationView.OnNavi
 
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
 
-
-
-
-
-
-
-
-        //testNotification();
-        //startAlarm();
-
-
-        //startAlarm();
-
-        //startssAlarm();
-
         setAlarm();
-
-
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        //TimelineFragmentsContainer t = new TimelineFragmentsContainer();
-        //getSupportFragmentManager().beginTransaction().add(R.id.content_frame,t).commit();
-
         displayView(R.id.nav_tasks);
-
-        //alarm manager
 
     }
 
 
         public void setAlarm(){
 
-            Log.e("setAlarm: ", "alarm d");
 
-
-            //get number
+            //get notification time preference
             String alarmS = PreferenceManager.getDefaultSharedPreferences(this).getString("time", "08:00");
 
             String[] timeArray = alarmS.split(":");
             int hour = (Integer.parseInt(timeArray[0]));
             int min = (Integer.parseInt(timeArray[1]));
-
 
             Calendar todayC = Calendar.getInstance();
 
@@ -119,13 +97,13 @@ public class mainTest extends AppCompatActivity implements NavigationView.OnNavi
             timePickerC.set(Calendar.HOUR_OF_DAY, hour);
             timePickerC.set(Calendar.MINUTE, min);
 
-            // if it's after or equal to the notification hour / min schedule for next day
+            // if the time is after or equal to the notification hour / min schedule alarm for the next day
             if (todayC.after(timePickerC)){
                 timePickerC.add(Calendar.DAY_OF_YEAR, 1); //add day
-                Log.e("alarm: ", "Alarm will schedule for tomorrow!");
+                Log.e("alarm: ", "Alarm will schedule for tomorrow");
             }
             else {
-                Log.e("alarm: ", "Alarm will schedule for today!");
+                Log.e("alarm: ", "Alarm will schedule for today");
             }
 
             AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
@@ -136,19 +114,6 @@ public class mainTest extends AppCompatActivity implements NavigationView.OnNavi
 
         }
 
-    private void cancelsAlarm(){
-
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(this,AlertReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this,1,intent,0);
-
-        alarmManager.cancel(pendingIntent);
-
-    }
-
-
-
-
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -157,6 +122,11 @@ public class mainTest extends AppCompatActivity implements NavigationView.OnNavi
         return true;
     }
 
+
+    /**Checks which fragment the user has cliked on in the in the navigation draw
+     * and begins transitioning to that fragment inside MainActiivty's XML content Frame.
+     * @param viewId is the ID of the fragment the user has clicked
+    * */
     public void displayView(int viewId) {
         Fragment fragment = null;
         String title = "Tasks";
@@ -183,26 +153,13 @@ public class mainTest extends AppCompatActivity implements NavigationView.OnNavi
             getSupportFragmentManager().beginTransaction().replace(R.id.content_frame,fragment).commit();
         }
 
+        //closes drawer asfter it's made the switch
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.nav_draw);
         drawer.closeDrawer(GravityCompat.START);
 
     }
-    public void testNotification(){
 
-        //channel 1 ignored on lower API <26
-        Notification notification = new NotificationCompat.Builder(this,AppManager.CHANNEL_1_ID)
-                .setSmallIcon(R.drawable.oval_shape)
-                .setContentTitle("title in main test")
-                .setContentText("message in main test")
-                .setPriority(NotificationCompat.PRIORITY_LOW)
-                .setCategory(NotificationCompat.CATEGORY_REMINDER)
-                .build();
-
-        //overwrites old notification id 1
-        notificationManager.notify(1,notification);
-
-    }
-
+    /*Checks user colour preferences and changes UI*/
     private void colorSwitch() {
         String colourSetting = PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
                 .getString("color_preference_key", "OCOLOUR");
@@ -227,7 +184,4 @@ public class mainTest extends AppCompatActivity implements NavigationView.OnNavi
                 toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         }
     }
-
-
-
-    }
+}

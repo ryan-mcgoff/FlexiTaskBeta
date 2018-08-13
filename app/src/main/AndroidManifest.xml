@@ -11,7 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".mainTest">
+        <activity android:name=".mainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -20,13 +20,13 @@
         </activity>
         <activity
             android:name=".FixedTaskEditor"
-            android:parentActivityName=".mainTest"
+            android:parentActivityName=".mainActivity"
             android:windowSoftInputMode="adjustPan|stateHidden">
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".mainTest" />
+                android:value=".mainActivity" />
         </activity>
         <activity android:name=".FlexiTaskEditor" />
 

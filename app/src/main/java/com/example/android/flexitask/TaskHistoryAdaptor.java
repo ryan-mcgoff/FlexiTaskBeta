@@ -15,9 +15,13 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
- * Created by rymcg on 26/07/2018.
+ * Created by Ryan Mcgoff (4086944), Jerry Kumar (3821971), Jaydin Mcmullan (9702973)
+ *
+ * A Cursor Adaptor  lets Android manage resources more efficiently
+ * by retrieving and releasing row and column values when the user scrolls, rather than loading everything into memory.
+ * This is a custom extension of CursorAdaptor for tasks
+ *
  */
-
 public class TaskHistoryAdaptor extends CursorAdapter {
 
     public TaskHistoryAdaptor(Context context, Cursor c) {

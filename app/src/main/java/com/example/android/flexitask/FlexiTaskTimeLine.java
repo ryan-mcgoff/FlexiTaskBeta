@@ -258,6 +258,7 @@ public class FlexiTaskTimeLine extends Fragment implements LoaderManager.LoaderC
 
     }
 
+    /*Checks user colour preferences and changes UI*/
     private void colorSwitch() {
         String colourSetting = PreferenceManager.getDefaultSharedPreferences(getContext())
                 .getString("color_preference_key", "OCOLOUR");

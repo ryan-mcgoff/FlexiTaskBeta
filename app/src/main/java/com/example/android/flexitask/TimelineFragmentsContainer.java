@@ -22,9 +22,7 @@ import com.github.clans.fab.FloatingActionMenu;
 /**
  * Created by Ryan Mcgoff (4086944), Jerry Kumar (3821971), Jaydin Mcmullan (9702973)
  *
- * A {@link Fragment} subclass for the Fixed-task fragment of the app
- * that implements the loadermanager interface to pass fixed task data to the a cursor
- * adaptor for the fragment's listview.
+ * A fragment that holds the {@link TaskPageAdaptor} for {@link FlexiTaskTimeLine} and {@link FixedTaskTimeLine} fragments
  */
 public class TimelineFragmentsContainer extends Fragment {
 

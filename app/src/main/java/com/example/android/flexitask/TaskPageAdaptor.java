@@ -7,6 +7,8 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 /**
  * Created by Ryan Mcgoff (4086944), Jerry Kumar (3821971), Jaydin Mcmullan (9702973)
+ * Our implementation of Task page adadptor, using {@link FlexiTaskTimeLine}
+ * and {@link FixedTaskTimeLine} as the fragments to switch between
  */
 
 public class TaskPageAdaptor extends FragmentPagerAdapter {

@@ -26,9 +26,8 @@ import java.util.Calendar;
  * Created by Ryan Mcgoff (4086944), Jerry Kumar (3821971), Jaydin Mcmullan (9702973)
  *
  * A {@link Fragment} subclass for the history fragment of the app
- * that implements the {@link LoaderManager] interface to deactived task data to the a cursor
- * adaptor for the fragment's listview.
- *
+ * that implements the {@link LoaderManager] interface to retrieve deactived task data to the a cursor
+ * adaptor for the fragment's listview. This is based on what filters the user has selected (chosen via buttons)
  *
  */
 public class TaskHistoryFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -194,7 +193,18 @@ public class TaskHistoryFragment extends Fragment implements LoaderManager.Loade
     }
 
 
-    //Loaders that retrieve data
+    /**
+     * This onCreateLoader method creates a new Cursor that contains the URI for the database and the columns wanted. It's passed
+     * to the content resolver which uses the URI to determine which contentProvider we want. The contentProvider is then
+     * responsible for interfacing with the database and returning a cursor (with the requested data from
+     * our projection) back to the contentResolver, and finally back to the loadermanager. The loader manager then passes
+     * this cursor object to the {@link #onLoadFinished(Loader, Cursor)} .
+     *
+     * @param id   the loader's ID
+     * @param args any arguments you want to pass to the loader when creating it (NOT USED)
+     * @return new cursorLoader with SQL projection and URI for the database we want to query. (this is passed to the cotent
+     * resolver by the loaderManager)
+     */
     @NonNull
     @Override
     public Loader<Cursor> onCreateLoader(int id, @Nullable Bundle args) {
@@ -231,6 +241,14 @@ public class TaskHistoryFragment extends Fragment implements LoaderManager.Loade
                 "CAST(" + taskContract.TaskEntry.COLUMN_LAST_COMPLETED + " AS DOUBLE)");
     }
 
+    /**
+     * Once the cursor loader set up in {@link #onCreateLoader(int, Bundle)} has been given the
+     * returned data cursor, the {@link LoaderManager} calls this method with the data.
+     * This method then gives the cursor adaptor the data to process
+     *
+     * @param loader the cursor loader
+     * @param data   the returned cursor with the requested data
+     */
     @Override
     public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
         mTaskCursorAdaptor.swapCursor(data);
