@@ -34,6 +34,7 @@ public final class taskContract {
 
         /** Name of database table for the tasks */
         public final static String TABLE_NAME = "tasks";
+        public final static String LABEL_TABLE_NAME = "labels";
 
         public static final String CONTENT_LIST_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_Tasks;
         public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_Tasks;
@@ -44,6 +45,8 @@ public final class taskContract {
          * Type: INTEGER
          */
         public final static String _ID = BaseColumns._ID;
+
+        public final static String Label_ID = "label_id";
 
 
         /**
@@ -114,6 +117,14 @@ public final class taskContract {
          * Type: INTEGER
          */
         public final static String COLUMN_LAST_COMPLETED = "last_completed";
+
+        /**
+         * Last completed date for {@link #TYPE_FLEXI}
+         *
+         * Type: INTEGER
+         */
+        public final static String COLUMN_LABEL_NAME = "label_name";
+
 
 
 

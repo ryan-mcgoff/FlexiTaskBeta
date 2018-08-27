@@ -1,20 +1,16 @@
 package com.example.android.flexitask;
 
 import android.app.AlarmManager;
-import android.app.Notification;
 import android.app.PendingIntent;
-import android.content.Context;
+import android.content.ContentValues;
 import android.content.Intent;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
-import android.os.Build;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -24,9 +20,11 @@ import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
-import android.widget.Toolbar;
+import android.view.SubMenu;
+import android.widget.Toast;
+
+import com.example.android.flexitask.data.taskContract;
+import com.example.android.flexitask.data.taskDBHelper;
 
 import java.util.Calendar;
 
@@ -37,12 +35,15 @@ import java.util.Calendar;
  * nav draw is selected and switch the current fragment it is displaying with the new one.
  * The class also sets up an alarm anytime the user opens the App (this will later be done by {@link AppManager}
  */
-public class mainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class mainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,NewTaskLabelDialog.NewTaskLabelDialogListener {
 
     private NotificationManagerCompat notificationManager;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private android.support.v7.widget.Toolbar toolbar;
+    private NavigationView navigationView;
+    private Menu menu;
+    private SubMenu subMenu;
 
 
     @Override
@@ -73,10 +74,30 @@ public class mainActivity extends AppCompatActivity implements NavigationView.On
 
         setAlarm();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
 
         displayView(R.id.nav_tasks);
+
+        menu = navigationView.getMenu();
+        subMenu = menu.addSubMenu("Labels");
+        subMenu.add(0,1, Menu.NONE,"New Label");
+
+        taskDBHelper mDbHelper = new taskDBHelper(this);
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+
+     Cursor cursorc = db.rawQuery("SELECT * FROM " + taskContract.TaskEntry.LABEL_TABLE_NAME,null);
+        if (cursorc.moveToNext()) {
+            int labelNameColumnIndex = cursorc.getColumnIndex(taskContract.TaskEntry.COLUMN_LABEL_NAME);
+            String labelName = cursorc.getString(labelNameColumnIndex);
+            //Toast.makeText(this,"",Toast.LENGTH_LONG).show();
+            subMenu.add(labelName);
+        }
+
+
+
+
+        navigationView.setNavigationItemSelectedListener(this);
+
 
     }
 
@@ -132,7 +153,9 @@ public class mainActivity extends AppCompatActivity implements NavigationView.On
         String title = "Tasks";
 
         Log.v(String.valueOf(viewId),"" );
+
         switch (viewId) {
+
             case R.id.nav_tasks:
                 fragment = new TimelineFragmentsContainer();
                 title  = "Tasks";
@@ -142,9 +165,14 @@ public class mainActivity extends AppCompatActivity implements NavigationView.On
                 fragment = new TaskHistoryFragment();
                 title = "History";
                 break;
+
             case R.id.nav_settings:
                 fragment = new AppSettingsFragment();
                 title = "History";
+                break;
+            case 1:
+                openDialog();
+
                 break;
 
         }
@@ -184,4 +212,33 @@ public class mainActivity extends AppCompatActivity implements NavigationView.On
                 toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         }
     }
+
+    private void openDialog(){
+
+        NewTaskLabelDialog newTaskLabelDialog = new NewTaskLabelDialog();
+        newTaskLabelDialog.show(getSupportFragmentManager(),"newTaskLabelDialog");
+
+
+    }
+
+    @Override
+    public void applyNewTaskLabelName(String newTextLabel) {
+
+        Toast.makeText(this,newTextLabel,Toast.LENGTH_LONG).show();
+        taskDBHelper mDbHelper = new taskDBHelper(this);
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(taskContract.TaskEntry.COLUMN_LABEL_NAME, newTextLabel);
+
+        db.insert(taskContract.TaskEntry.LABEL_TABLE_NAME,null,cv);
+
+        Menu menu = navigationView.getMenu();
+        subMenu.add(newTextLabel);
+        navigationView.setNavigationItemSelectedListener(this);
+
+
+
+
+    }
+
 }

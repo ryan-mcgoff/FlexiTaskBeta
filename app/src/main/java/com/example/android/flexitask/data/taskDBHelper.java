@@ -36,7 +36,7 @@ public class taskDBHelper extends SQLiteOpenHelper {
      */
     @Override
     public void onCreate(SQLiteDatabase db) {
-        //This string is used to create the table
+        //This string is used to create the table for tasks
         String SQL_CREATE_TASK_DATABASE = "CREATE TABLE " + taskContract.TaskEntry.TABLE_NAME + " ("
                 + taskContract.TaskEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + taskContract.TaskEntry.COLUMN_TASK_TITLE + " TEXT NOT NULL, "
@@ -47,12 +47,22 @@ public class taskDBHelper extends SQLiteOpenHelper {
                 + taskContract.TaskEntry.COLUMN_RECCURING_PERIOD + " INTEGER NOT NULL DEFAULT 0, "
                 + taskContract.TaskEntry.COLUMN_HISTORY + " TEXT, "
                 + taskContract.TaskEntry.COLUMN_TYPE_TASK + " INTEGER NOT NULL, "
-                + taskContract.TaskEntry.COLUMN_STATUS + " INTEGER NOT NULL);";
+                + taskContract.TaskEntry.COLUMN_STATUS + " INTEGER NOT NULL)";
         db.execSQL(SQL_CREATE_TASK_DATABASE);
+
+
+        //This String creates table for
+
+        String SQL_CREATE_Label_DATABASE = "CREATE TABLE " + taskContract.TaskEntry.LABEL_TABLE_NAME + " ("
+                + taskContract.TaskEntry.Label_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + taskContract.TaskEntry.COLUMN_LABEL_NAME + " TEXT NOT NULL)";
+        db.execSQL(SQL_CREATE_Label_DATABASE);
+
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         //not used
+        //onCreate(db);
     }
 }
